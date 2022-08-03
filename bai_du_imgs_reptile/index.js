@@ -9,15 +9,14 @@ const {
   initProgressBar
 } = require('../utils');
 
-const searWord = '航母图片'; // 需要搜索的名称
+const searchWord = '航母图片'; // 需要搜索的名称
 const dirname = 'images';  // 存储文件夹的名称
-const word1 = '%BA%BD%C4%B8%CD%BC%C6%AC';
 
 let total = 0;
 let succeed = 0;
 const progressBar = initProgressBar();
 
-const url = `https://image.baidu.com/search/index?tn=baiduimage&ie=gb18030&word=${word1}`;
+const url = `https://image.baidu.com/search/index?tn=baiduimage&ie=utf-8&word=${encodeURIComponent(searchWord)}`;
 
 
 const headers = {
@@ -54,14 +53,14 @@ superagent.get(url)
       })
 
       total = imageUrlList.length;
-      console.log('total----', total);
+
       try {
         // 创建文件夹
         await mkImageDir(__dirname, dirname);
         progressBar.start(total, 0);
         // 下载图片
         imageUrlList.forEach((url, index) => {
-          const pathname = path.join(__dirname, dirname, `${searWord}-${index}.png`);
+          const pathname = path.join(__dirname, dirname, `${searchWord}-${index}.png`);
           downloadImage(url, pathname).then(() => {
             succeed++;
             progressBar.update(succeed);
