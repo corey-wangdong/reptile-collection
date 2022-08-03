@@ -19,11 +19,18 @@ function getValueListByReg(str, key) {
 function mkImageDir(pathName, dirName) {
   const fullPath = path.resolve(pathName, dirName);
   if (fs.existsSync(fullPath)) {
-    console.log(`${dirName}目录已存在, 跳过此步骤`);
-    return;
+    removeDir(fullPath, dirName);
   }
   fs.mkdirSync(path.resolve(pathName, dirName));
   console.log(`创建目录${dirName}成功`);
+}
+
+// 删除已存在的文件夹
+function removeDir(pathname, dirname) {
+  const process = require('child_process');
+  console.log(`${dirname}目录已存在, 准备执行删除`);
+  process.execSync(`rm -rf ${pathname}`);
+  console.log(`历史目录${dirname}删除完成`);
 }
 
 // 下载图片
