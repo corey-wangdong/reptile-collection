@@ -59,5 +59,5 @@ module.exports = {
   getValueListByReg,
   mkImageDir,
   downloadImage,
-  initProgressBar
+  initProgressBar,
 };
