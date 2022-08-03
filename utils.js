@@ -28,31 +28,24 @@ function mkImageDir(pathName, dirName) {
 
 // 下载图片
 function downloadImage(url, pathname) {
-  if (fs.existsSync(pathname)) {
-    console.log(`文件已存在, 跳过此步骤`);
-    return;
-  }
-  superagent.get(url).end((err, res) => {
-    console.log('res+======', res);
-    if (err) {
-      console.log(err);
-      return;
+  return new Promise((resolve, reject) => {
+    if (fs.existsSync(pathname)) {
+      return reject(`文件已存在, 跳过此步骤`);
     }
-    fs.writeFile(pathname, res.body, 'binary', (err) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log(`下载成功`);
+    superagent.get(url).end((err, res) => {
+      if (err) return reject(err);
+
+      fs.writeFile(pathname, res.body, 'binary', (err) => {
+        if (err) return reject(err);
+        return resolve();
+      })
     })
   })
 }
 
 // 进度条
 function initProgressBar() {
-  return new cliProgress.SingleBar({
-    clearOnComplete: false
-  }, cliProgress.Presets.shades_classic);
+  return new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
 }
 
 module.exports = {

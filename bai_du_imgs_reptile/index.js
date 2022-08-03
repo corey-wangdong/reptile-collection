@@ -15,7 +15,7 @@ const word1 = '%BA%BD%C4%B8%CD%BC%C6%AC';
 
 let total = 0;
 let succeed = 0;
-const bar = initProgressBar();
+const progressBar = initProgressBar();
 
 const url = `https://image.baidu.com/search/index?tn=baiduimage&ie=gb18030&word=${word1}`;
 
@@ -38,29 +38,43 @@ superagent.get(url)
   .set('Connection', headers['Connection'])
   .set('User-Agent', headers['User-Agent'])
   .set('sec-ch-ua', headers['sec-ch-ua'])
-  .end((err, res) => {
+  .end(async (err, res) => {
     if (err) {
       console.log(`访问失败----${err}`);
     } else {
       const htmlText = res.text;
       const $ = cheerio.load(htmlText);
 
+      // 图片地址
       const imageUrlList = getValueListByReg(htmlText, 'objURL')
-      console.log('imageUrlList+++++++', imageUrlList);
 
+      // 标题
       const titleList = getValueListByReg(htmlText, 'fromPageTitle').map(item => {
         return item.replace("<strong>", '').replace("<\\/strong>", '');
       })
-      console.log('titleList+++++++', titleList);
 
-      // 创建文件夹
-      mkImageDir(__dirname, dirname)
-
-      // 下载图片
-      imageUrlList.forEach((url, index) => {
-        const pathname = path.join(__dirname, dirname, `${searWord}-${index}.png`);
-        downloadImage(url, pathname);
-      });
+      total = imageUrlList.length;
+      console.log('total----', total);
+      try {
+        // 创建文件夹
+        await mkImageDir(__dirname, dirname);
+        progressBar.start(total, 0);
+        // 下载图片
+        imageUrlList.forEach((url, index) => {
+          const pathname = path.join(__dirname, dirname, `${searWord}-${index}.png`);
+          downloadImage(url, pathname).then(() => {
+            succeed++;
+            progressBar.update(succeed);
+          }).then(() => {
+            if (succeed === total) {
+              progressBar.stop();
+              console.log('恭喜！图片下载完成！')
+            }
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   })
 
