@@ -13,6 +13,8 @@
   "dependencies": {
     "cheerio": "1.0.0-rc.12",
     "cli-progress": "^3.11.2",
+    "commander": "^8.1.0",
+    "inquirer": "^8.1.2",
     "superagent": "^8.0.0"
   }
 }
