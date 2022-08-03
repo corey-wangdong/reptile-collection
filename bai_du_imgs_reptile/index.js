@@ -1,6 +1,4 @@
-const superagent = require("superagent");
 const path = require('path');
-const cheerio = require("cheerio");
 const inquirer = require('inquirer');
 const fs = require('fs');
 const {
@@ -70,7 +68,7 @@ function run(keyword, counts, dir_name) {
         }).then(() => {
           if (succeed === total) {
             progressBar.stop();
-            console.log('恭喜！图片下载完成！')
+            console.log(`哇哦😄 ${keyword}的图片下载完成啦！快去看看吧`)
           }
         });
       });
