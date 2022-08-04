@@ -28,22 +28,34 @@ function request(url, AcceptKey = 'Accept') {
   })
 }
 
-const initQuestions =
+const selectTypeQuestions = [
+  {
+    type: 'input',
+    name: 'keyword',
+    message: '亲，输入要搜索的类型: 1 表示图片, 2 表示视频',
+    default: '1'
+  }
+]
+
+const imageQuestions =
   [
     {
       type: 'input',
       name: 'keyword',
       message: '请输入要搜索的关键词',
+      default: '风景'
     },
     {
       type: 'input',
-      name: 'dirname',
-      message: '请输入存放的文件夹名称，默认为 images 文件夹',
+      name: 'assetDir',
+      message: '请输入存放的文件夹名称',
+      default: 'images'
     },
     {
       type: 'number',
       name: 'counts',
-      message: '请输入要下载的数量, 最小30张',
+      message: '请输入要下载的数量,最小下载30张',
+      default: '默认下载 30 张图片'
     }
   ];
 
@@ -63,6 +75,7 @@ const getDataByPage = async (start, total, word) => {
 
 module.exports = {
   request,
-  initQuestions,
+  selectTypeQuestions,
+  imageQuestions,
   getDataByPage
 }

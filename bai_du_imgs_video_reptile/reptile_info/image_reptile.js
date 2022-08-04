@@ -1,29 +1,21 @@
 const path = require('path');
-const inquirer = require('inquirer');
-const fs = require('fs');
+
 const {
   getValueListByReg,
   mkImageDir,
   downloadImage,
   initProgressBar
-} = require('../utils');
-const { request, initQuestions, getDataByPage } = require('./tool');
+} = require('../../utils');
+const { request, getDataByPage } = require('../tool');
 
 let total = 0;
 let succeed = 0;
 const progressBar = initProgressBar();
 
-inquirer.prompt(initQuestions).then(result => {
-  const { keyword, counts, dirname } = result;
-  console.log('result++++', result);
-  if (keyword) run(keyword, counts, dirname);
-})
-
-function run(keyword, counts, dir_name) {
+function run_image(keyword, counts, dir_name) {
   const dirname = dir_name ? dir_name : 'images';
   const params = `tn=baiduimage&ie=utf-8&word=${encodeURIComponent(keyword)}`;
   const url = `https://image.baidu.com/search/index?${params}`;
-
 
   request(url).then(async res => {
     const htmlText = res.text;
@@ -57,11 +49,11 @@ function run(keyword, counts, dir_name) {
 
     try {
       // 创建文件夹
-      await mkImageDir(__dirname, dirname);
+      await mkImageDir(__dirname, `../${dirname}`);
       progressBar.start(total, 0);
       // 下载图片
       allImageUrls.forEach((item, index) => {
-        const pathname = path.join(__dirname, dirname, `${keyword}-${index}.png`);
+        const pathname = path.join(__dirname, `../${dirname}`, `${keyword}-${index}.png`);
         downloadImage(item.imgUrl, pathname).then(() => {
           succeed++;
           progressBar.update(succeed);
@@ -76,4 +68,8 @@ function run(keyword, counts, dir_name) {
       console.log(error);
     }
   })
+}
+
+module.exports = {
+  run_image
 }
