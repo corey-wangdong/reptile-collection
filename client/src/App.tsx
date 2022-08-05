@@ -1,34 +1,38 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Image from './pages/Image';
+import Video from './pages/Video';
+
+export interface IData {
+  url:string;
+  title:string;
+}
 
 function App() {
   const [keyWord,setKeyWord] = useState('');
-  const [searchType,setSearchType] = useState('');
+  const [searchType,setSearchType] = useState('图片');
   const [searchNum,setSearchNum] = useState(1);
-  const [data,setData] = useState([]);
+  const [data,setData] = useState<IData[]>([]);
 
   const handleKeyWord = (e:any) => {
     const keyWord = e.target.value;
-    console.log('-----keyWord', keyWord);
     setKeyWord(keyWord);
   }
 
   const handleSearchType = (e:any) => {
     const searchType = e.target.value;
-    console.log('-----searchType', searchType);
     setSearchType(searchType);
   }
 
   const handleNeedNum = (e:any) => {
     const needNum = e.target.value;
-    console.log('-----needNum', needNum);
     setSearchNum(needNum);
   }
 
   const handleSubmit = () => {
-    console.log('-----');
     const params = {keyWord,searchType,searchNum};
-    axios.get('http://10.15.51.105:666/reptile-info',{
+    console.log('params-----',params);
+    axios.get('http://192.168.50.151:666/reptile-info',{
       params: params
     }).then(res => {
       console.log('res------',res);
@@ -38,8 +42,17 @@ function App() {
     })
   }
 
-  console.log('data+++++',data);
-  
+  const renderContent = () => {
+    switch(searchType) {
+      case 'image':
+        return <Image data = {data}/>;
+      case '视频':
+        return <Video data = {data}/>
+      default:
+        return <Image data = {data}/>;
+    }
+  }
+
   return (
     <div className="App">
       <div>输入搜索的关键词：<input type="text" onBlur={handleKeyWord}/></div>
@@ -48,22 +61,7 @@ function App() {
       <div onClick={handleSubmit}>确定</div>
 
       <div>
-        {
-          data.map((item:any) => {
-            return <div>
-              {searchType === '视频'? (
-                <video width="320" height="240" controls preload='auto'>
-                <source src={item.video_url} type="video/mp4"></source>
-                <source src={item.video_url} type = "video/ogg" />
-                Your browser does not support the video tag.
-              </video>
-              ):(
-                <img style={{width:'200px'}} src={`${item.imgUrl}`} alt="" />
-              )}
-              <div>{item.title}</div>
-            </div>
-          })
-        }
+        {renderContent()}
       </div>
     </div>
   );

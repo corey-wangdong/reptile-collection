@@ -125,7 +125,7 @@ const getVideosByPage = async (word, counts) => {
   const resultVideos = videos.map(video => {
     return {
       title: video.title,
-      video_url: video.play_url
+      url: video.play_url
     }
   })
   return resultVideos;

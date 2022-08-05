@@ -17,7 +17,7 @@ async function run_image(keyword, counts, dir_name) {
 
     // 为了方便和后续json数据结合, 修改为同一个数组
     let allImageUrls = imageUrlList.map((imgUrl, index) => ({
-      imgUrl,
+      url: imgUrl,
       title: titleList[index]
     }));
     const firstPageCount = allImageUrls.length;
@@ -29,7 +29,7 @@ async function run_image(keyword, counts, dir_name) {
     const formatImgUrls = imgUrlData.map(item => {
       const title = item.fromPageTitle;
       return {
-        imgUrl: item.middleURL,
+        url: item.middleURL,
         title: title ? title.replace("<strong>", '').replace("</strong>", '') : ''
       }
     });
