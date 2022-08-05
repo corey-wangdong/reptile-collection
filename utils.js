@@ -16,12 +16,16 @@ function getValueListByReg(str, key) {
 }
 
 // 创建目录
-function mkImageDir(pathName, dirName) {
-  const fullPath = path.resolve(pathName, dirName);
-  if (fs.existsSync(fullPath)) {
+function mkAssetDir(pathName, dirName, needRemove = false) {
+  const fullPath = path.resolve(pathName, `../asset/${dirName}`);
+  const hasMkDir = fs.existsSync(fullPath);
+
+  if (hasMkDir) {
+    if (!needRemove) return;
     removeDir(fullPath, dirName);
   }
-  fs.mkdirSync(path.resolve(pathName, dirName));
+
+  fs.mkdirSync(fullPath);
   console.log(`创建目录${dirName}成功`);
 }
 
@@ -34,14 +38,13 @@ function removeDir(pathname, dirname) {
 }
 
 // 下载图片
-function downloadImage(url, pathname) {
+function downloadAsset(url, pathname) {
   return new Promise((resolve, reject) => {
     if (fs.existsSync(pathname)) {
       return reject(`文件已存在, 跳过此步骤`);
     }
     superagent.get(url).end((err, res) => {
       if (err) return reject(err);
-
       fs.writeFile(pathname, res.body, 'binary', (err) => {
         if (err) return reject(err);
         return resolve();
@@ -57,7 +60,7 @@ function initProgressBar() {
 
 module.exports = {
   getValueListByReg,
-  mkImageDir,
-  downloadImage,
+  mkAssetDir,
+  downloadAsset,
   initProgressBar,
 };

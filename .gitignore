@@ -7,4 +7,6 @@
 # Ignore bundler config.
 node_modules
 
-bai_du_imgs_video_reptile/images
+bai_du_imgs_video_reptile/asset
+
+.DS_Store

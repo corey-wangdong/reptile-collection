@@ -6,6 +6,7 @@ specifiers:
   commander: ^8.1.0
   inquirer: ^8.1.2
   superagent: ^8.0.0
+  superagent-charset: ^1.2.0
 
 dependencies:
   cheerio: 1.0.0-rc.12
@@ -13,6 +14,7 @@ dependencies:
   commander: 8.3.0
   inquirer: 8.2.4
   superagent: 8.0.0
+  superagent-charset: 1.2.0
 
 packages:
 
@@ -586,6 +588,12 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       ansi-regex: 5.0.1
+    dev: false
+
+  /superagent-charset/1.2.0:
+    resolution: {integrity: sha512-1qgAqpQmUlequetXb/Rg3ExEDoIf6hdVHm6H6skABL8nVGErPzcLEJ7Keke568P9ymvUxVyBpq3svBgKExo3gg==}
+    dependencies:
+      iconv-lite: 0.4.24
     dev: false
 
   /superagent/8.0.0:
