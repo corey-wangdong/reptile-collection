@@ -1,5 +1,5 @@
-const charset = require('superagent-charset');
-const superagent = charset(require('superagent'));
+
+const superagent = require('superagent');
 
 const headers_default = {
   'Accept': '*/*',
