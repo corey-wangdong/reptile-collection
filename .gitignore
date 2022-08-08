@@ -7,6 +7,8 @@
 # Ignore bundler config.
 node_modules
 
-bai_du_imgs_video_reptile/asset
+server/bai_du_imgs_video_reptile/asset
+
+server/jue_jin_reptile/info.json
 
 .DS_Store
