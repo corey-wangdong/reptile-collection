@@ -1,4 +1,8 @@
 const superagent = require('superagent');
+const info = require('./info.json');
+
+const params = `aid=${info.aid}&uuid=${info.uuid}`;
+const baseUrl = `https://api.juejin.cn/growth_api/v1`;
 
 function request(url, headers, type = 'get') {
   return new Promise((resolve, reject) => {
@@ -14,6 +18,7 @@ function request(url, headers, type = 'get') {
 const default_headers = {
   "accept": "*/*",
   "content-type": "application/json",
+  "accept-language": "zh-CN,zh;q=0.9",
   "referer": "https://juejin.cn/",
   "origin": "https://juejin.cn",
   "sec-ch-ua": `".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"`,
@@ -27,5 +32,8 @@ const default_headers = {
 
 module.exports = {
   request,
+  params,
+  baseUrl,
+  info,
   default_headers
 }

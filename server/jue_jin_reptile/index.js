@@ -1,5 +1,5 @@
 const info = require('./info.json');
-const { request, default_headers } = require('./utils');
+const { request, params, baseUrl, default_headers } = require('./utils');
 
 const headers_detail = {
   ...default_headers,
@@ -7,16 +7,6 @@ const headers_detail = {
 }
 
 const run_sign = async () => {
-  const params = `aid=${info.aid}&uuid=${info.uuid}`;
-  const baseUrl = `https://api.juejin.cn/growth_api/v1`;
-  // 获取签到次数
-  const counts = await request(`${baseUrl}/get_counts?${params}`, headers_detail);
-  const countsInfo = JSON.parse(counts.text);
-
-  // 获取当前的总点数
-  const cur_point = await request(`${baseUrl}/get_cur_point?${params}`, headers_detail);
-  const curPointInfo = JSON.parse(cur_point.text);
-
   // 获取今天的签到状态
   const today_status = await request(`${baseUrl}/get_today_status?${params}`, headers_detail);
   const todayStatusInfo = JSON.parse(today_status.text);
@@ -48,6 +38,23 @@ const run_sign = async () => {
     console.log('已签到失败');
     return;
   }
+
+  // 获取签到次数
+  const counts = await request(`${baseUrl}/get_counts?${params}`, headers_detail);
+  const countsInfo = JSON.parse(counts.text);
+
+  // 获取当前的总点数
+  const cur_point = await request(`${baseUrl}/get_cur_point?${params}`, headers_detail);
+  const curPointInfo = JSON.parse(cur_point.text);
+
+  // 获取惊喜好物
+  // {page_no: 1, page_size: 16, type: 1, got_channel: 2}
+  // {page_no: 2, page_size: 16, type: 1, got_channel: 2}
+  // {page_no: 1, page_size: 16, type: 2, got_channel: 2}
+  // const query = 'page_no=1&page_size=16&type=1&got_channel=2';
+  // const benefit_page = await request(`${baseUrl}/get_benefit_page?${params}&${query}`, headers_detail, 'post');
+  // const benefitPageInfo = JSON.parse(benefit_page.text);
+  // console.log('benefitPageInfo----', benefitPageInfo);
 }
 
 run_sign();
