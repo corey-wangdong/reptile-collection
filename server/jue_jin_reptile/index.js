@@ -10,15 +10,10 @@ const run_sign = async () => {
   // 获取今天的签到状态
   const today_status = await request(`${baseUrl}/get_today_status?${params}`, headers_detail);
   const todayStatusInfo = JSON.parse(today_status.text);
-
+  console.log(`你今天 ${todayStatusInfo.data ? '已' : '还未'} 签到。`);
   // 获取当月的签到信息
   // const month_info = await request(`${baseUrl}/get_by_month?${params}`, headers_detail);
   // console.log('month_info----', month_info.text);
-
-  console.log(`你目前连续签到 ${countsInfo.data.cont_count} 天，总共签到 ${countsInfo.data.sum_count} 天。`);
-  console.log(`你今天 ${todayStatusInfo.data ? '已' : '还未'} 签到。`);
-  console.log(`你当前的总矿石数是 ${curPointInfo.data} 个`);
-
 
   if (!todayStatusInfo.data) {
     // 开始去签到
@@ -26,26 +21,20 @@ const run_sign = async () => {
     const check_in = await request(`${baseUrl}/check_in?${params}&${signature}`, headers_detail, 'post');
     const checkInInfo = JSON.parse(check_in.text);
     console.log('checkInInfo----', checkInInfo);
-
-    if (checkInInfo.err_msg) {
-      checkInInfo.err_msg === 'success'
-        ?
-        console.log('你已签到成功')
-        :
-        console.log(`${checkInInfo.err_msg}`)
-      return;
-    }
-    console.log('已签到失败');
-    return;
+    checkInInfo.err_msg === 'success'
+      ? console.log('恭喜你,签到成功')
+      : console.log(`${checkInInfo.err_msg}`)
   }
 
   // 获取签到次数
   const counts = await request(`${baseUrl}/get_counts?${params}`, headers_detail);
   const countsInfo = JSON.parse(counts.text);
+  console.log(`你目前连续签到 ${countsInfo.data.cont_count} 天，总共签到 ${countsInfo.data.sum_count} 天。`);
 
   // 获取当前的总点数
   const cur_point = await request(`${baseUrl}/get_cur_point?${params}`, headers_detail);
   const curPointInfo = JSON.parse(cur_point.text);
+  console.log(`你当前的总矿石数是 ${curPointInfo.data} 个`);
 
   // 获取惊喜好物
   // {page_no: 1, page_size: 16, type: 1, got_channel: 2}
