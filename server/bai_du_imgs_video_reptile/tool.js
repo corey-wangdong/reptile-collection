@@ -1,5 +1,5 @@
-const charset = require('superagent-charset');
-const superagent = charset(require('superagent'));
+
+const superagent = require('superagent');
 
 const headers_default = {
   'Accept': '*/*',
@@ -125,7 +125,7 @@ const getVideosByPage = async (word, counts) => {
   const resultVideos = videos.map(video => {
     return {
       title: video.title,
-      video_url: video.play_url
+      url: video.play_url
     }
   })
   return resultVideos;
